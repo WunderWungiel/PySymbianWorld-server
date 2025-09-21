@@ -12,13 +12,13 @@ if config["proxy"]:
 
 folder = "/var/www/wunderwungiel.pl/html/Symbian/SymbianWorldMegaRepo"
 
-@app.route("/get_categories/")
+@app.route("/get_categories")
 def _get_categories():
 
     folders = [path for path in os.listdir(folder) if os.path.isdir(os.path.join(folder, path)) and len(os.listdir(os.path.join(folder, path))) > 0]
     return folders
 
-@app.route("/get_files/")
+@app.route("/get_files")
 def _get_files():
     
     category = request.args.get("category")
