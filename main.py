@@ -3,6 +3,12 @@ from lib import config
 import os
 
 app = Flask(__name__)
+app.url_map.strict_slashes = False
+
+def generate_error(content):
+    return {
+        "error": content
+    }
 
 if config["proxy"]:
     from werkzeug.middleware.proxy_fix import ProxyFix
@@ -22,8 +28,10 @@ def _get_categories():
 def _get_files():
     
     category = request.args.get("category")
-    if not category: abort(422)
-    if category not in _get_categories(): abort(422)
+    if not category:
+        return generate_error("Missing parameter: category")
+    elif category not in _get_categories():
+        return generate_error("Invalid parameter: category")
 
     files = [path for path in os.listdir(os.path.join(folder, category)) if os.path.isfile(os.path.join(folder, category, path))]
     return files
